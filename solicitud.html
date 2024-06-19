@@ -49,6 +49,9 @@
             tickets.push(ticket);
             localStorage.setItem('tickets', JSON.stringify(tickets));
 
+            // Mostrar ventana emergente de confirmación inmediatamente
+            alert('Tu ticket se ha enviado correctamente. Mantente al tanto de tu correo o número de teléfono.');
+
             // Enviar datos a FormSubmit usando fetch
             fetch('https://formsubmit.co/ajax/paginashtml1@gmail.com', {
                 method: 'POST',
@@ -59,10 +62,8 @@
                 body: JSON.stringify(ticket)
             }).then(response => response.json())
               .then(data => {
-                  // Esperar 1 segundo antes de redirigir a la página de confirmación
-                  setTimeout(() => {
-                      window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/enviado.html';
-                  }, 1000);
+                  // Recargar la página después de enviar el ticket
+                  window.location.reload();
               }).catch(error => {
                   console.error('Error:', error);
               });
@@ -131,8 +132,6 @@
             <p>solo preciona una ves y espera a que cargue la pagina</p> <button type="submit" id="enviar" name="enviar">Enviar Ticket </button>
         </div>
     </form>
-
-
 
 </body>
 </html>
