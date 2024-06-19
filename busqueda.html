@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de la Búsqueda - Tractiesa</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <header>
+        <h1 class="tit">Resultados de la Búsqueda - Tractiesa</h1>
+    </header>
+
+    <div class="ticket-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Trabajador</th>
+                    <th>Correo o Telefonico</th>
+                    <th>Empresa</th>
+                    <th>Área de Origen</th>
+                    <th>Área de Destino</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="searchResultsBody">
+                <!-- Los resultados de la búsqueda se insertarán aquí -->
+            </tbody>
+        </table>
+        <button id="printButton" onclick="printTicket()" style="display:none;">Imprimir Ticket</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Tractores e Implementos Económicos S.A. de C.V.</p>
+    </footer>
+
+    <script>
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function loadSearchResults() {
+            const query = getQueryParameter('query').toLowerCase();
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            const searchResultsBody = document.getElementById('searchResultsBody');
+            const printButton = document.getElementById('printButton');
+            searchResultsBody.innerHTML = '';
+
+            if (!query) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="9">Por favor, ingrese un ID de ticket o una fecha para buscar.</td>`;
+                searchResultsBody.appendChild(row);
+                printButton.style.display = 'none';
+                return;
+            }
+
+            const isIDSearch = !isNaN(query);
+            let filteredTickets = [];
+
+            if (isIDSearch) {
+                const ticket = tickets.find(ticket => ticket.id.toString() === query);
+                if (ticket) {
+                    filteredTickets.push(ticket);
+                }
+            } else {
+                filteredTickets = tickets.filter(ticket => ticket.fecha.toLowerCase().includes(query));
+            }
+
+            if (filteredTickets.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="9">No se encontraron tickets con el ID o la fecha proporcionada.</td>`;
+                searchResultsBody.appendChild(row);
+                printButton.style.display = 'none';
+            } else {
+                filteredTickets.forEach(ticket => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${ticket.id}</td>
+                        <td>${ticket.fecha}</td>
+                        <td>${ticket.trabajador}</td>
+                        <td>${ticket.correo}</td>
+                        <td>${ticket.empresa}</td>
+                        <td>${ticket.area_origen}</td>
+                        <td>${ticket.area_destino}</td>
+                        <td>${ticket.descripcion}</td>
+                        <td>${ticket.estado}</td>
+                    `;
+                    searchResultsBody.appendChild(row);
+                });
+                printButton.style.display = 'inline';
+            }
+        }
+
+        function printTicket() {
+            const printContents = document.querySelector('.ticket-list').innerHTML;
+            const originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+
+            window.location.reload();
+        }
+
+        window.onload = loadSearchResults;
+    </script>
+</body>
+</html>

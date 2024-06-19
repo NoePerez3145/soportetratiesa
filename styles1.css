@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.ticket-list {
+    margin: 20px auto;
+    max-width: 1200px;
+    background-color: #ffffffd7;
+    padding: 20px;
+    box-shadow: 0 0 10px rgb(0, 0, 0);
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ffffffad;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #ffffff62;
+    font-weight: bold;
+    color: #000000;
+    text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff62;
+}
+
+tr:hover {
+    background-color: #ffffff62;
+}
+
+footer {
+    text-align: center;
+    background-color: #00000000;
+    color: #ffffff;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.form-group {
+    margin-top: 20px;
+    text-align: center;
+}
+
+button {
+    background-color: #945e21;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #ffffff;
+    color: #945e21;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        font-size: 12px;
+    }
+    th, td {
+        padding: 8px;
+    }
+}
+
+.termin{
+    text-align: center;
+    font-size: 30px;
+    color: #ffffff;
+    padding: 50px 50px;
+}
+.tit{
+    text-align: center;
+    font-size: 35px;
+    color: #ffffff;
+    padding: 20px 20px;
+}
+body{
+    height: 100vh;
+    background-image: url('fondo2.jpg'); /* Ruta a tu imagen de fondo */
+    background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
+    background-position: center;
+}

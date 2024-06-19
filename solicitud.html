@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Tickets Tractiesa</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        function setCurrentDate() {
+            const currentDate = new Date().toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+            document.getElementById('fecha').value = currentDate;
+        }
+
+        function generateId() {
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            const lastId = tickets.length ? tickets[tickets.length - 1].id : 0;
+            return lastId + 1;
+        }
+
+        function saveTicket(event) {
+            event.preventDefault();
+
+            const id = generateId();
+            const fecha = document.getElementById('fecha').value;
+            const trabajador = document.getElementById('trabajador').value;
+            const correo = document.getElementById('Correo').value;
+            const empresa = document.getElementById('empresa').value;
+            const area_origen = document.getElementById('area_origen').value;
+            const area_destino = document.getElementById('area_destino').value;
+            const descripcion = document.getElementById('descripcion').value;
+
+            const ticket = {
+                id,
+                fecha,
+                trabajador,
+                correo,
+                empresa,
+                area_origen,
+                area_destino,
+                descripcion
+            };
+
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            tickets.push(ticket);
+            localStorage.setItem('tickets', JSON.stringify(tickets));
+
+            // Enviar datos a FormSubmit usando fetch
+            fetch('https://formsubmit.co/ajax/paginashtml1@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(ticket)
+            }).then(response => response.json())
+              .then(data => {
+                  // Esperar 1 segundo antes de redirigir a la página de confirmación
+                  setTimeout(() => {
+                      window.location.href = 'COLOCA AQUI LA PAGINA DE TICKETS ENVIADOS';
+                  }, 1000);
+              }).catch(error => {
+                  console.error('Error:', error);
+              });
+        }
+
+        window.onload = setCurrentDate;
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Sistema de Tickets Tractiesa</h1>
+    </header>
+
+    <form onsubmit="saveTicket(event)">
+        <div class="form-group">
+            <label for="fecha">Fecha del Ticket</label>
+            <input type="text" id="fecha" name="fecha" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="trabajador">Nombre del Trabajador</label>
+            <input type="text" id="trabajador" name="trabajador" placeholder="Empezando por Apellidos" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Correo">Correo o Telefono de Contacto</label>
+            <input type="text" id="Correo" name="Correo" placeholder="Correo o telefono de contacto" required>
+        </div>
+
+        <div class="form-group">
+            <label for="empresa">Empresa</label>
+            <select id="empresa" name="empresa" required>
+                <option id="TRACTIESA" name="TRACTIESA" value="TRACTIESA">Tractores e Implementos Económicos S.A. de C.V.</option>
+                <option id="CRESCA" name="CRESCA" value="CRESCA">Crédito Especializado Al Campo S.A. de C.V. SOFOM ENR</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="area_origen">Área de Origen</label>
+            <select id="area_origen" name="area_origen" required>
+                <option id="Maquinaria" name="Maquinaria" value="Maquinaria">Maquinaria</option>
+                <option id="Refacciones" name="Refacciones" value="Refacciones">Refacciones</option>
+                <option id="Servicio" name="Servicio" value="Servicio">Servicio</option>
+                <option id="Logística" name="Logística" value="Logística">Logística</option>
+                <option id="Compras" name="Compras" value="Compras">Compras</option>
+                <option id="Administración" name="Administración" value="Administración">Administración</option>
+                <option id="Recursos_Humanos" name="Recursos_Humanos" value="Recursos_Humanos">Recursos Humanos</option>
+                <option id="Informática" name="Informática" value="Informática">Tecnologías de la Computación</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="area_destino">Área de Destino</label>
+            <select id="area_destino" name="area_destino" required>
+                <option id="Informática" name="Informática" value="Informática">Tecnologías de la Computación</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción del Problema</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <p>solo preciona una ves y espera a que cargue la pagina</p> <button type="submit" id="enviar" name="enviar">Enviar Ticket </button>
+        </div>
+    </form>
+
+    <footer>
+        <p>&copy; 2024 Tractores e Implementos Económicos S.A. de C.V.</p>
+    </footer>
+
+</body>
+</html>

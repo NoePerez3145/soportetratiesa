@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión - Tractiesa</title>
+    <link rel="stylesheet" href="styles3.css">
+    <!-- Font Awesome para los iconos (puedes cambiar la URL según tu configuración) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .password-container {
+            position: relative;
+        }
+
+        #togglePassword {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('contrasena');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+
+        function login(event) {
+            event.preventDefault();
+
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('contrasena').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.correo === correo && user.contrasena === contrasena);
+
+            if (user) {
+                alert('Inicio de sesión exitoso');
+                if (user.privilegio === 'admin') {
+                    window.location.href = 'COLOCA AQUI LA PAGINA PARA ADMINSTRADORES';
+                } else {
+                    window.location.href = 'COLOCA AQUI LA PAGINA PARA ACCESO A TRABAJADORES';
+                }
+                // Evitar que se pueda retroceder al inicio de sesión
+                history.pushState(null, null, window.location.href);
+                window.addEventListener('popstate', function () {
+                    history.pushState(null, null, window.location.href);
+                });
+            } else {
+                alert('Correo o contraseña incorrectos');
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <header>
+        <h1 class="trac">Inicio de Sesión - Tractiesa</h1>
+    </header>
+
+    <form id="loginForm" onsubmit="login(event)">
+        <div class="form-group">
+            <label for="correo" class="ti">Correo Electrónico</label>
+            <input class="escri" type="email" id="correo" name="correo" placeholder="Correo Electrónico" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contrasena" class="ti">Contraseña</label>
+            <div class="password-container">
+                <input class="escri" type="password" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+                <span id="togglePassword" onclick="togglePasswordVisibility()">
+                    <i id="toggleIcon" class="fa fa-eye-slash"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Iniciar Sesión</button>
+        </div>
+    </form>
+
+    <footer>
+        <p>&copy; 2024 Tractores e Implementos Económicos S.A. de C.V.</p>
+    </footer>
+</body>
+</html>

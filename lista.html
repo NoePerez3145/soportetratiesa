@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tickets - Tractiesa</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+    <header>
+        <h1 class="tit">Lista de Tickets - Tractiesa</h1>
+        <h1 class="termin">Tickets Abiertos</h1>
+    </header>
+
+    <div class="ticket-list">
+        <form id="searchForm">
+            <input type="text" id="searchQuery" placeholder="Buscar por ID o fecha">
+            <button type="button" onclick="searchTickets()">Buscar</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Trabajador</th>
+                    <th>Correo o Telefonico</th>
+                    <th>Empresa</th>
+                    <th>Área de Origen</th>
+                    <th>Área de Destino</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="ticketBody">
+                <!-- Los tickets se insertarán aquí -->
+            </tbody>
+        </table>
+        <div class="form-group">
+            <button onclick="clearTickets()">Borrar Todos los Tickets</button>
+        </div>
+    </div>
+
+    <h2 class="termin">Tickets Cerrados</h2>
+    <div class="ticket-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Trabajador</th>
+                    <th>Correo</th>
+                    <th>Empresa</th>
+                    <th>Área de Origen</th>
+                    <th>Área de Destino</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="closedTicketBody">
+                <!-- Los tickets cerrados se insertarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Tractores e Implementos Económicos S.A. de C.V.</p>
+    </footer>
+
+    <script>
+        function loadTickets() {
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            const ticketBody = document.getElementById('ticketBody');
+            const closedTicketBody = document.getElementById('closedTicketBody');
+            ticketBody.innerHTML = '';
+            closedTicketBody.innerHTML = '';
+
+            tickets.forEach(ticket => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${ticket.id}</td>
+                    <td>${ticket.fecha}</td>
+                    <td>${ticket.trabajador}</td>
+                    <td>${ticket.correo}</td>
+                    <td>${ticket.empresa}</td>
+                    <td>${ticket.area_origen}</td>
+                    <td>${ticket.area_destino}</td>
+                    <td>${ticket.descripcion}</td>
+                    <td>
+                        <select onchange="updateTicketStatus(${ticket.id}, this.value)">
+                            <option value="pendiente" ${ticket.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                            <option value="abierto" ${ticket.estado === 'abierto' ? 'selected' : ''}>Abierto</option>
+                            <option value="cerrado" ${ticket.estado === 'cerrado' ? 'selected' : ''}>Cerrado</option>
+                        </select>
+                    </td>
+                `;
+                if (ticket.estado === 'cerrado') {
+                    closedTicketBody.appendChild(row);
+                } else {
+                    ticketBody.appendChild(row);
+                }
+            });
+        }
+
+        function updateTicketStatus(id, newStatus) {
+            const tickets = JSON.parse(localStorage.getItem('tickets')) || [];
+            const ticketIndex = tickets.findIndex(ticket => ticket.id === id);
+            if (ticketIndex !== -1) {
+                tickets[ticketIndex].estado = newStatus;
+                localStorage.setItem('tickets', JSON.stringify(tickets));
+                loadTickets();
+            }
+        }
+
+        function clearTickets() {
+            localStorage.removeItem('tickets');
+            loadTickets();
+        }
+
+        function searchTickets() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (!query) {
+                alert("Por favor, ingrese un ID de ticket o una fecha para buscar.");
+                return;
+            }
+            window.location.href = `http://127.0.0.1:5500/busquedadeticket.html?query=${encodeURIComponent(query)}`;
+        }
+
+        window.onload = loadTickets;
+    </script>
+</body>
+</html>

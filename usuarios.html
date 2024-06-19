@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuarios - Tractiesa</title>
+    <link rel="stylesheet" href="styles2.css">
+    <!-- Font Awesome para los iconos (puedes cambiar la URL según tu configuración) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 20px;  /* Ajusta el tamaño del símbolo aquí */
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        form {
+            width: 48%;  /* Ajusta el ancho de los formularios */
+        }
+    </style>
+
+    <script>
+        function saveUser(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('contrasena').value;
+            const privilegio = document.querySelector('input[name="privilegio"]:checked').value;
+
+            const user = {
+                nombre,
+                correo,
+                contrasena,
+                privilegio
+            };
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert('Usuario registrado exitosamente');
+            document.getElementById('registroForm').reset();
+            loadUsers();
+        }
+
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userBody = document.getElementById('userBody');
+            userBody.innerHTML = '';
+
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.nombre}</td>
+                    <td>${user.correo}</td>
+                    <td>${user.privilegio}</td>
+                    <td><button onclick="deleteUser(${index})">Eliminar</button></td>
+                `;
+                userBody.appendChild(row);
+            });
+        }
+
+        function deleteUser(index) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.splice(index, 1);
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
+
+        function togglePasswordVisibility(id, toggleId) {
+            const passwordInput = document.getElementById(id);
+            const toggleIcon = document.getElementById(toggleId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '×'; // Cambia el ícono a una 'x' para mostrar la contraseña
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '○'; // Cambia el ícono a un círculo para ocultar la contraseña
+            }
+        }
+
+        function resetPassword(event) {
+            event.preventDefault();
+
+            const correo = document.getElementById('resetCorreo').value;
+            const nuevaContrasena = document.getElementById('newContrasena').value;
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(user => user.correo === correo);
+
+            if (userIndex !== -1) {
+                users[userIndex].contrasena = nuevaContrasena;
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Contraseña restablecida exitosamente');
+                document.getElementById('resetPasswordForm').reset();
+                loadUsers();
+            } else {
+                alert('Correo no encontrado');
+            }
+        }
+
+        window.onload = loadUsers;
+    </script>
+</head>
+<body>
+    <header>
+        <h1 class="ti">Registro de Usuarios - Tractiesa</h1>
+    </header>
+
+    <div class="container">
+        <form id="registroForm" onsubmit="saveUser(event)">
+            <h2>Agregar Usuario</h2>
+            <div class="form-group">
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre Completo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" placeholder="Correo Electrónico" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contrasena">Contraseña</label>
+                <div style="position: relative;">
+                    <input type="password" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+                    <span id="togglePassword" class="toggle-password" onclick="togglePasswordVisibility('contrasena', 'togglePassword')">○</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Privilegio</label>
+                <label><input type="radio" name="privilegio" value="admin" required> Admin</label>
+                <label><input type="radio" name="privilegio" value="normal" required> Normal</label>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Registrar Usuario</button>
+            </div>
+        </form>
+
+        <form id="resetPasswordForm" onsubmit="resetPassword(event)">
+            <h2>Restablecer Contraseña</h2>
+            <div class="form-group">
+                <label for="resetCorreo">Correo Electrónico</label>
+                <input type="email" id="resetCorreo" name="resetCorreo" placeholder="Correo Electrónico" required>
+            </div>
+
+            <div class="form-group">
+                <label for="newContrasena">Nueva Contraseña</label>
+                <div style="position: relative;">
+                    <input type="password" id="newContrasena" name="newContrasena" placeholder="Nueva Contraseña" required>
+                    <span id="resetTogglePassword" class="toggle-password" onclick="togglePasswordVisibility('newContrasena', 'resetTogglePassword')">○</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Restablecer Contraseña</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="user-list">
+        <h2>Usuarios Registrados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo Electrónico</th>
+                    <th>Privilegio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="userBody">
+                <!-- Los usuarios se insertarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Tractores e Implementos Económicos S.A. de C.V.</p>
+    </footer>
+</body>
+</html>
