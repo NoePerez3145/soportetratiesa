@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de Sesión - Tractiesa</title>
-    <link rel="stylesheet" href="styles3.css">
-    <!-- Font Awesome para los iconos (puedes cambiar la URL según tu configuración) -->
+    <link rel="stylesheet" href="styles3.css"> <!-- Asegúrate de que este archivo CSS esté disponible públicamente -->
+
+    <!-- Font Awesome para los iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <style>
@@ -43,6 +44,9 @@
 
             const correo = document.getElementById('correo').value;
             const contrasena = document.getElementById('contrasena').value;
+
+            // Aquí deberías implementar una forma más segura de autenticación
+            // en lugar de almacenar usuarios y contraseñas en localStorage.
 
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const user = users.find(user => user.correo === correo && user.contrasena === contrasena);
@@ -99,3 +103,4 @@
     <!-- Scripts adicionales si los necesitas -->
 </body>
 </html>
+
