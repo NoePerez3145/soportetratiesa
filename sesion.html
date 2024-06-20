@@ -50,23 +50,28 @@
             const correo = document.getElementById('correo').value;
             const contrasena = document.getElementById('contrasena').value;
 
-            const users = await fetchUsers();
-            const user = users.find(user => user.correo === correo && user.contrasena === contrasena);
+            try {
+                const users = await fetchUsers();
+                const user = users.find(user => user.correo === correo && user.contrasena === contrasena);
 
-            if (user) {
-                alert('Inicio de sesión exitoso');
-                if (user.privilegio === 'admin') {
-                    window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/admin.html';
-                } else {
-                    window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/solicitud.html';
-                }
-                // Evitar que se pueda retroceder al inicio de sesión
-                history.pushState(null, null, window.location.href);
-                window.addEventListener('popstate', function () {
+                if (user) {
+                    alert('Inicio de sesión exitoso');
+                    if (user.privilegio === 'admin') {
+                        window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/admin.html';
+                    } else {
+                        window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/solicitud.html';
+                    }
+                    // Evitar que se pueda retroceder al inicio de sesión
                     history.pushState(null, null, window.location.href);
-                });
-            } else {
-                alert('Correo o contraseña incorrectos');
+                    window.addEventListener('popstate', function () {
+                        history.pushState(null, null, window.location.href);
+                    });
+                } else {
+                    alert('Correo o contraseña incorrectos');
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                alert('Hubo un problema al intentar iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
             }
         }
     </script>
