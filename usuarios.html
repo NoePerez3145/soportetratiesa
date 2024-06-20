@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuarios - Tractiesa</title>
     <link rel="stylesheet" href="styles2.css">
-    <!-- Font Awesome para los iconos (puedes cambiar la URL según tu configuración) -->
+    <!-- Font Awesome para los iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <style>
@@ -48,7 +48,7 @@
                 privilegio
             };
 
-            const users = JSON.parse(localStorage.getItem('users')) || [];
+            let users = JSON.parse(localStorage.getItem('users')) || [];
             users.push(user);
             localStorage.setItem('users', JSON.stringify(users));
 
@@ -58,7 +58,7 @@
         }
 
         function loadUsers() {
-            const users = JSON.parse(localStorage.getItem('users')) || [];
+            let users = JSON.parse(localStorage.getItem('users')) || [];
             const userBody = document.getElementById('userBody');
             userBody.innerHTML = '';
 
@@ -76,7 +76,7 @@
         }
 
         function deleteUser(index) {
-            const users = JSON.parse(localStorage.getItem('users')) || [];
+            let users = JSON.parse(localStorage.getItem('users')) || [];
             users.splice(index, 1);
             localStorage.setItem('users', JSON.stringify(users));
             loadUsers();
@@ -139,7 +139,7 @@
                 <label for="contrasena">Contraseña</label>
                 <div style="position: relative;">
                     <input type="password" id="contrasena" name="contrasena" placeholder="Contraseña" required>
-                    <span id="togglePassword" class="toggle-password" onclick="togglePasswordVisibility('contrasena', 'togglePassword')">○</span>
+                    <span class="toggle-password" onclick="togglePasswordVisibility('contrasena', 'togglePassword')">○</span>
                 </div>
             </div>
 
@@ -165,7 +165,7 @@
                 <label for="newContrasena">Nueva Contraseña</label>
                 <div style="position: relative;">
                     <input type="password" id="newContrasena" name="newContrasena" placeholder="Nueva Contraseña" required>
-                    <span id="resetTogglePassword" class="toggle-password" onclick="togglePasswordVisibility('newContrasena', 'resetTogglePassword')">○</span>
+                    <span class="toggle-password" onclick="togglePasswordVisibility('newContrasena', 'resetTogglePassword')">○</span>
                 </div>
             </div>
 
@@ -198,3 +198,4 @@
     </footer>
 </body>
 </html>
+
