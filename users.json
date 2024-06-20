@@ -1,6 +1,14 @@
 [
-          "nombre": "Admin User",
+    {
+        "nombre": "admin",
         "correo": "soporte@tractiesa.mx",
-        "contrasena": "Soporte2024",
+        "contrasena": "123456",
         "privilegio": "admin"
+    },
+    {
+        "nombre": "Pedro Hernandez",
+        "correo": "pedro.hernandez@tractiesa.mx",
+        "contrasena": "123456",
+        "privilegio": "normal"
+    }
 ]
