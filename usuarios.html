@@ -95,26 +95,9 @@
             }
         }
 
-        function resetPassword(event) {
-            event.preventDefault();
-
-            const correo = document.getElementById('resetCorreo').value;
-            const nuevaContrasena = document.getElementById('newContrasena').value;
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            const userIndex = users.findIndex(user => user.correo === correo);
-
-            if (userIndex !== -1) {
-                users[userIndex].contrasena = nuevaContrasena;
-                localStorage.setItem('users', JSON.stringify(users));
-                alert('Contraseña restablecida exitosamente');
-                document.getElementById('resetPasswordForm').reset();
-                loadUsers();
-            } else {
-                alert('Correo no encontrado');
-            }
-        }
-
-        window.onload = loadUsers;
+        window.onload = function() {
+            loadUsers();
+        };
     </script>
 </head>
 <body>
@@ -153,26 +136,6 @@
                 <button type="submit">Registrar Usuario</button>
             </div>
         </form>
-
-        <form id="resetPasswordForm" onsubmit="resetPassword(event)">
-            <h2>Restablecer Contraseña</h2>
-            <div class="form-group">
-                <label for="resetCorreo">Correo Electrónico</label>
-                <input type="email" id="resetCorreo" name="resetCorreo" placeholder="Correo Electrónico" required>
-            </div>
-
-            <div class="form-group">
-                <label for="newContrasena">Nueva Contraseña</label>
-                <div style="position: relative;">
-                    <input type="password" id="newContrasena" name="newContrasena" placeholder="Nueva Contraseña" required>
-                    <span class="toggle-password" onclick="togglePasswordVisibility('newContrasena', 'resetTogglePassword')">○</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <button type="submit">Restablecer Contraseña</button>
-            </div>
-        </form>
     </div>
 
     <div class="user-list">
@@ -196,6 +159,39 @@
     <footer>
         <p>&copy; 2024 Tractores e Implementos Económicos S.A. de C.V.</p>
     </footer>
+
+    <script>
+        // Cargar usuarios al cargar la página
+        window.onload = function() {
+            loadUsers();
+        };
+
+        // Función para cargar usuarios desde localStorage
+        function loadUsers() {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const userBody = document.getElementById('userBody');
+            userBody.innerHTML = '';
+
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.nombre}</td>
+                    <td>${user.correo}</td>
+                    <td>${user.privilegio}</td>
+                    <td><button onclick="deleteUser(${index})">Eliminar</button></td>
+                `;
+                userBody.appendChild(row);
+            });
+        }
+
+        // Función para eliminar usuario
+        function deleteUser(index) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users.splice(index, 1);
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
+    </script>
 </body>
 </html>
-
