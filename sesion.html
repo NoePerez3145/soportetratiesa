@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de Sesión - Tractiesa</title>
-    <link rel="stylesheet" href="styles3.css"> <!-- Asegúrate de que este archivo CSS esté disponible públicamente -->
-
+    <link rel="stylesheet" href="styles3.css">
     <!-- Font Awesome para los iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -45,18 +44,15 @@
             const correo = document.getElementById('correo').value;
             const contrasena = document.getElementById('contrasena').value;
 
-            // Aquí deberías implementar una forma más segura de autenticación
-            // en lugar de almacenar usuarios y contraseñas en localStorage.
-
-            const users = JSON.parse(localStorage.getItem('users')) || [];
+            let users = JSON.parse(localStorage.getItem('users')) || [];
             const user = users.find(user => user.correo === correo && user.contrasena === contrasena);
 
             if (user) {
                 alert('Inicio de sesión exitoso');
                 if (user.privilegio === 'admin') {
-                    window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/admin.html';
+                    window.location.href = 'https://tu-pagina.com/admin.html';
                 } else {
-                    window.location.href = 'https://noeperez3145.github.io/soportetratiesagithub.io/solicitud.html';
+                    window.location.href = 'https://tu-pagina.com/solicitud.html';
                 }
                 // Evitar que se pueda retroceder al inicio de sesión
                 history.pushState(null, null, window.location.href);
@@ -68,7 +64,6 @@
             }
         }
     </script>
-
 </head>
 <body>
     <header>
@@ -103,4 +98,3 @@
     <!-- Scripts adicionales si los necesitas -->
 </body>
 </html>
-
